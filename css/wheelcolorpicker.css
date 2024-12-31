@@ -33,9 +33,6 @@
 }
 
 .jQWCP-wWheel {
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
   position: relative;
   float: left;
   width: 180px;
@@ -52,6 +49,12 @@
 
 .jQWCP-wWheel:hover {
   border-color: #666;
+}
+
+.jQWCP-wWheelImage {
+  border-radius: 50%;
+  width: inherit;
+  height: inherit;
 }
 
 .jQWCP-wWheelOverlay {

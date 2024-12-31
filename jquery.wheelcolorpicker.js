@@ -849,16 +849,6 @@
     WCP.ColorPicker.overlay = $overlay.get(0);
     $('body').append($overlay);
 
-    // Insert CSS for color wheel
-    var wheelImage = WCP.ColorPicker.getWheelDataUrl(200);
-    $('head').append(
-      '<style type="text/css">' + 
-        '.jQWCP-wWheel {' + 
-          'background-image: url(' + wheelImage + ');' +
-        '}' +
-      '</style>'
-    );
-
     // Attach events
     $('html').on('mouseup.wheelColorPicker', WCP.Handler.html_mouseup);
     $('html').on('touchend.wheelColorPicker', WCP.Handler.html_mouseup);
@@ -877,11 +867,10 @@
    */
   WCP.ColorPicker.createWidget = function() {
     /// WIDGET ///
-    // Notice: We won't use canvas to draw the color wheel since 
-    // it may takes time and cause performance issue.
     var $widget = $(
       "<div class='jQWCP-wWidget'>" + 
         "<div class='jQWCP-wWheel'>" + 
+          "<canvas class='jQWCP-wWheelImage'></canvas>" +
           "<div class='jQWCP-wWheelOverlay'></div>" +
           "<span class='jQWCP-wWheelCursor'></span>" +
         "</div>" +
@@ -928,6 +917,9 @@
       .css('user-select', 'none')
       .css('-webkit-touch-callout', 'none');
 
+    var $wheelImage = $widget.find('.jQWCP-wWheelImage');
+    WCP.ColorPicker.drawWheel($wheelImage.get(0), 200);
+
     // Disable context menu on sliders
     // Workaround for touch browsers
     $widget.on('contextmenu.wheelColorPicker', function() { return false; });
@@ -946,14 +938,13 @@
   };
 
   /**
-   * Function: getWheelDataUrl
+   * Function: drawWheel
    * 
-   * Create color wheel image and return as base64 encoded data url.
+   * Draw color wheel image.
    */
-  WCP.ColorPicker.getWheelDataUrl = function( size ) {
+  WCP.ColorPicker.drawWheel = function( canvas, size ) {
     var r = size / 2; // radius
     var center = r;
-    var canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
     var context = canvas.getContext('2d');
@@ -1005,8 +996,6 @@
         context.fillRect(x, y, 1, 1);
       }
     }
-
-    return canvas.toDataURL();
   };
 
   /////////////
